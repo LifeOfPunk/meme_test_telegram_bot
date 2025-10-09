@@ -13,6 +13,19 @@ function parseDateArg(text?: string): string | null {
 }
 
 export function registerAdminHandlers(adminBot: Telegraf<Context>) {
+  adminBot.start(async (ctx) => {
+    await ctx.reply([
+      '👋 Это админ-бот. Краткая инструкция:',
+      '',
+      '• /stats YYYY-MM-DD — количество заявок за дату',
+      '• /list YYYY-MM-DD — список заявок за дату',
+      '• /export YYYY-MM-DD — экспорт CSV за дату',
+      '• /export all — экспорт CSV всех записей',
+      '',
+      'Например: /stats 2025-10-09',
+    ].join('\n'));
+  });
+
   adminBot.command('stats', async (ctx) => {
     const date = parseDateArg(ctx.message?.text);
     if (!date) {
@@ -74,3 +87,4 @@ export function registerAdminHandlers(adminBot: Telegraf<Context>) {
     await ctx.replyWithDocument({ source: filePath });
   });
 }
+
